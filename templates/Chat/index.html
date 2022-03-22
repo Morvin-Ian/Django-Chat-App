@@ -1,0 +1,114 @@
+<title>Brace Home</title>
+{% extends 'Chat/main.html' %}
+
+{% block content %}
+<style>
+    body{
+        background-color: black;
+    }
+    a{
+         text-decoration: none;
+     }
+     .title{
+         float: right;
+         margin-right: 5%;
+     }
+     h3{
+         color: rgb(255, 206, 8);
+         text-align: center;
+     }
+
+     .container{
+         display: flex;
+         justify-content: space-between;
+         margin-top: 30px;
+     }
+     .left{
+         flex-basis: 20%;
+         color: rgba(248, 221, 170, 0.796);
+         margin: 30px;
+        
+     }
+     .left li:hover{
+         text-decoration: underline;
+     }
+     .centre{
+         flex-basis: 60%;
+         color: rgba(248, 221, 170, 0.796);
+         padding: 10px;border-radius: 10px;
+         margin-top: 2px;
+
+     }
+     .right{
+         flex-basis: 20%;
+         color: rgba(248, 221, 170, 0.796);
+     }
+   
+
+ </style>
+
+<body>
+    
+
+<div class="container bg-dark">
+    <div class="left">
+       <hr>  <h3>Find Topics</h3> <hr>
+       <li > <a href="{% url 'home-page'%}">All Topics</a></li>
+
+        {% for topic in topics %}
+           <ul>
+               <li> <a  href="{% url 'home-page' %}?q={{topic.name}}">{{topic.name}}</a></li>
+           </ul>
+  
+        {% endfor %}
+
+    </div>
+
+    <div class="centre bg-dark">
+      <hr>  <h3> Available Rooms</h3> <hr>
+      <a style="color: rgba(240, 174, 6, 0.439); font-weight: light;" href="{% url 'create-room'%}">New Room</a>
+        {% for room in rooms %}
+          <div class="cont">
+              <div class="profile">
+                <a href="{% url 'profile' %}"> <img  style="object-fit: cover;" class="rounded-circle account-img" src="{{ room.room_host.profile.profile_pic.url }}" width="50px" height="50px"> <br>
+                    @{{room.room_host.username}}</a> 
+              </div>
+              <div class="room">
+                    <a href="{% url 'room-page' room.id%}">{{room.name}}</a></li> 
+                    <p>{{room.description|truncatewords:10}}</p>
+                    <p class="title" style="font-size: small;">{{room.room_title}} </p>
+                    {% if request.user == room.room_host%}
+                    <a style="color: blue;" href="{% url 'update-room' room.id%}">Edit</a>
+                    <a style="color:red;" href="{% url 'delete-room' room.id%}">Delete</a>
+                    {% endif %}
+                   <hr>  
+              </div>
+          </div>
+           
+    {% endfor %}
+
+    </div>
+
+    <div class="right bg-dark" >
+        <hr>
+        <h3>Recent Activities</h3>
+        <hr>
+        {% for comment in comments %}
+        <ul>
+            <li> <strong>@{{comment.user}}</strong> {{comment.created|timesince}}
+            <p>Replied to: {{comment.room}}</p>
+            <small>Reply: {{comment.body}}</small>
+            
+            </li>
+        </ul> 
+        <hr>   
+       
+        {% endfor %}
+      
+    </div>
+</div>
+
+    
+
+{% endblock content%}
+</body>
