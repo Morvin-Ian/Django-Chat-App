@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 from .models import ChatRoom, Topic, Message
 from .forms import RoomForm, UpdateDetails, UpdateProfile
@@ -24,7 +25,12 @@ def index(request):
     ) # Accessing foreign-keyed values upwards
     comments = Message.objects.all()
     topics = Topic.objects.all()
-    context = {"rooms":rooms, "topics":topics, "comments":comments}
+
+    p = Paginator(ChatRoom.objects.all(), 2)
+    page = request.GET.get('page')
+    room = p.get_page(page)
+
+    context = {"rooms":rooms, "topics":topics, "comments":comments,"room":room}
     return render(request, 'Chat/index.html', context)
 
 def room_view(request, pk):
