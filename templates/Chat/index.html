@@ -22,6 +22,7 @@
          display: flex;
          justify-content: space-between;
          margin-top: 30px;
+         flex-wrap: wrap;
      }
      .left{
          color: rgba(248, 221, 170, 0.796);
@@ -37,7 +38,6 @@
          padding: 10px;border-radius: 10px;
          margin-top: 2px;
          flex-basis: 50%;
-       
 
      }
      .right{
@@ -46,6 +46,8 @@
      }
      .cont{
          display: flex;
+         padding: 10px;
+         border-radius: 3px;
      }
      .room{
          margin-left: 30px;
@@ -59,42 +61,39 @@
 
 <div class="container bg-dark">
     <div class="left">
-       <hr> <h3>Search Topics</h3> <hr>
-       <li > <a style="color: wheat;" href="{% url 'home-page'%}">All Topics</a></li>
-
+       <hr><h3>Search Topics</h3> <hr>
+       <li ><a style="color: wheat;" href="{% url 'home-page'%}">All Topics</a></li>
         {% for topic in topics %}
            <ul>
                <li> <a style="color: wheat;" href="{% url 'home-page' %}?q={{topic.name}}">{{topic.name}}</a></li>
            </ul>
-  
         {% endfor %}
-
     </div>
 
     <div class="centre bg-black">
-      <hr>  <h3> Available Chat Rooms</h3> <hr>
-      <a style="color: rgba(240, 174, 6, 0.83); font-weight: light;" href="{% url 'create-room'%}">New Room</a> <br> <br>
+     <section class="bg-dark"><hr> <h3 class="bg-dark"> Available Chat Rooms</h3> <hr></section>
+      <a style="color: rgba(240, 174, 6, 0.83); font-weight: light;" href="{% url 'create-room'%}">Create New Room</a> <br> <br>
         {% for room in room %}
-          <div class="cont">
+          <div class="cont bg-dark">
               <div class="profile">
                 <a href="{% url 'profile' %}"> <img  style="object-fit: cover;" class="rounded-circle account-img" src="{{ room.room_host.profile.profile_pic.url }}" width="50px" height="50px"> <br>
                   
               </div>
               <div class="room">
-                <strong style="color: whitesmoke;" >{{room.room_host.last_name}} {{room.room_host.first_name}}</strong>
-                   <small style="color: gray;" >@{{room.room_host.username}}</small> <br>
-                   <a style="font-style: italic;" href="{% url 'room-page' room.id%}">Room: {{room.name}}</a></li> 
+                    <strong style="color: whitesmoke;" >{{room.room_host.last_name}} {{room.room_host.first_name}}</strong>
+                    <small style="color: gray;" >@{{room.room_host.username}}</small> <br>
+                    <a style="font-style: italic;" href="{% url 'room-page' room.id%}">Room: {{room.name}}</a></li> 
                     <p>{{room.description|truncatewords:10}}</p>
+
                     {% if request.user == room.room_host%}
-            
-                    <a  class=" btn-outline-warning mt-1"  href="{% url 'update-room' room.id%}"> Edit</a>
-                    <a  class=" btn-outline-danger mt-1"  href="{% url 'delete-room' room.id%}">Delete</a>
+                        <a  class="btn btn-outline-warning mt-1"  href="{% url 'update-room' room.id%}"> Edit</a>
+                        <a  class="btn btn-outline-danger mt-1"  href="{% url 'delete-room' room.id%}">Delete</a>
                     {% endif %}
                 
               </div>
           </div>
            <hr> 
-    {% endfor %}
+        {% endfor %}
           <!-- {{room}} <br> -->
           <!-- Has previous : {{room.has_previous}} <br>
           Has next : {{room.has_next}} <br>
@@ -102,20 +101,16 @@
           Pages Number : {{room.paginator.num_pages}} <br> -->
 
           {% if room.has_previous %}
-          <a style="margin: 5px;" href="?page=1">&laquo First</a>
-          <a style="margin: 5px;" href="?page={{room.previous_page_number}}">Previous</a>
+            <a style="margin: 5px;" href="?page=1">&laquo First</a>
+            <a style="margin: 5px;" href="?page={{room.previous_page_number}}">Previous</a>
           {% endif %}
 
           {% if room.has_next %}
-          <a style="margin: 5px;" href="?page={{room.next_page_number}}">Next</a>
-          <a style="margin: 5px;" href="?page={{room.paginator.num_pages}}">&raquo Last</a>
-          
+            <a style="margin: 5px;" href="?page={{room.next_page_number}}">Next</a>
+            <a style="margin: 5px;" href="?page={{room.paginator.num_pages}}">&raquo Last</a>
           {% endif %}
 
-
-        <br>  Page {{room.number}} out of {{room.paginator.num_pages}} 
-
-
+        <br> Page {{room.number}} out of {{room.paginator.num_pages}} 
     </div>
 
     <div class="right bg-dark" >
@@ -123,15 +118,14 @@
         <h3>Recent Activities</h3>
         <hr>
         {% for comment in comments %}
-        <ul>
-            <li> <strong>@{{comment.user}}</strong> {{comment.created|timesince}}
-            <p>Replied to: {{comment.room}}</p>
-            <small>Reply: {{comment.body}}</small>
-            
-            </li>
-        </ul> 
-        <hr>   
-       
+            <ul>
+                <li> <strong>@{{comment.user}}</strong> {{comment.created|timesince}}
+                <p>Replied to: {{comment.room}}</p>
+                <small>Reply: {{comment.body}}</small>
+                
+                </li>
+            </ul> 
+            <hr>   
         {% endfor %}
       
     </div>

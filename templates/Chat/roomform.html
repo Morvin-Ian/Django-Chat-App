@@ -1,13 +1,66 @@
 <title>Brace Room Form</title>
-{% extends 'Chat/main.html' %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 {% load crispy_forms_tags%}
 
-
     {% block content%}
-    <form style="margin:50px"  method="post">
+    <style>
+        body{
+            background-color: black;
+        }
+        form{
+            padding: 30px;
+            margin-top: 0px;
+            color: wheat;
+        }
+        h2{
+            text-align: center;
+            color: rgba(240, 174, 6, 0.83);
+            padding: 5px;
+        }
+
+        .form_group{
+            width: 60%;
+            margin-left: 20%;
+            color: wheat;
+        }
+        .btn{
+            margin-left: 35%;  
+        }
+    </style>
+  <body>
+      
+
+    <form style="margin:50px" class="bg-dark" method="post">
+        <h2 class="bg-black">Create/Update Room</h2>
         {%csrf_token%}
-        {{form|crispy}}
-        <input type="submit" value="submit">
+        <div class="form_group">
+            <label for="room_title">Room Title</label> <br>
+            <input required type="text" name="topic" list="topic-list">
+            <datalist id="topic-list">
+                <select id="room_title">
+                    {% for topic in topics %}
+                        <option value="{{topic.name}}">{{topic.name}}</option>
+                    {% endfor %}
+                </select>
+            </datalist>
+        </div>
+
+        <div class="form_group">
+            <label for="name">Name</label> <br>
+            {{form.name}}
+        </div>
+
+        <div class="form_group">
+            <label for="descrription">Room Description</label> <br>
+            {{form.description}}
+        </div>
+
+        <button class="btn btn-outline-success mt-2" type="submit">Create</button>
 
     </form>
+
+  </body>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+
     {% endblock content %}

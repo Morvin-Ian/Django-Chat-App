@@ -1,4 +1,3 @@
-
 <title>Brace Room</title>
 {% extends 'Chat/main.html' %}
 
@@ -37,7 +36,10 @@
                 {% for comment in comments %}
                    <strong>@{{comment.user}} </strong>{{comment.created|timesince}} Ago<br>
                     {{comment.body}} <br>
-
+                   
+                    {% if request.user == comment.user%}
+                        <a  class=" btn-outline-danger mt-1"  href="{% url 'delete-message' comment.id%}">Delete</a> <br> <hr>
+                    {% endif %}
                 {% endfor %} 
                 {% if request.user.is_authenticated %}
                 <form method="post">

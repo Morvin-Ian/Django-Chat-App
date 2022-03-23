@@ -33,6 +33,7 @@ def index(request):
     context = {"rooms":rooms, "topics":topics, "comments":comments,"room":room}
     return render(request, 'Chat/index.html', context)
 
+@login_required(login_url='login')
 def room_view(request, pk):
     room = ChatRoom.objects.get(id=pk)
     comments = room.message_set.all() 
@@ -56,22 +57,31 @@ def room_view(request, pk):
 
     return render(request, 'Chat/room.html', context)
 
+@login_required(login_url='login')
 def create_room(request):
+    topics = Topic.objects.all()
     form = RoomForm()
     if request.method == 'POST':
+        name = request.POST.get('topic')
         form = RoomForm(request.POST)
-        if form.is_valid:
-            room = form.save(commit =False)
-            room.room_host = request.user 
-            room.save()
-            return redirect('home-page')
+        topic, created = Topic.objects.get_or_create(name=name)
+        ChatRoom.objects.create(
+            room_host = request.user,
+            room_title = topic,
+            name = request.POST.get('name'),
+            description = request.POST.get('description')
+
+        )
+       
+        return redirect('home-page')
 
 
-    return render(request, 'Chat/roomform.html',{"form":form})
+    return render(request, 'Chat/roomform.html',{"topics":topics ,"form":form})
 
 
 @login_required(login_url='login')
 def update_room(request, pk):
+    topics = Topic.objects.all()
     room = ChatRoom.objects.get(id=pk)
     form = RoomForm(instance=room)
     
@@ -79,19 +89,33 @@ def update_room(request, pk):
         return HttpResponse("Not Allowed to Update ")
 
     if request.method == 'POST':
-        form = RoomForm(request.POST, instance=room)
-        if form.is_valid:
-            form.save()
-            return redirect('home-page')
-    return render(request, 'Chat/roomform.html',{"form":form})
+        topic_name = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topic_name)
+        room.name = request.POST.get('name'),
+        room.description = request.POST.get('description')
+        room.save() 
+        return redirect('home-page')
+    return render(request, 'Chat/roomform.html',{"form":form,"topics":topics})
 
 def delete_room(request, pk):
     room = ChatRoom.objects.get(id=pk)
+    if request.user != room.room_host:
+        return HttpResponse("Not Allowed to Delete ")
+
     if request.method == 'POST':
             room.delete()
             return redirect('home-page')
     return render(request, 'Chat/delete.html',{"room":room})
 
+def delete_message(request, pk):
+    message_del = Message.objects.get(id=pk)
+    if request.user != message_del.user:
+        return HttpResponse("Not Allowed to Update ")
+
+    if request.method == 'POST':
+            message_del.delete()
+            return redirect('home-page')
+    return render(request, 'Chat/delete.html',{"message_del":message_del})
 
 
 def profile(request):

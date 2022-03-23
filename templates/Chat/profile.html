@@ -1,3 +1,4 @@
+<title>Profile Page</title>
 {% extends 'Chat/main.html'%}
 {% load crispy_forms_tags%}
 {% block content%}
@@ -17,34 +18,37 @@
     .sidebar li a{
         color: wheat;
     }
+    .right{
+        flex-basis: 30%;
+    }
 
  
 </style>
 
-<div class="content">
+<div class="content bg-dark">
 
-    <div class="sidebar bg-dark">
-    <hr>  <h3>Find Topics</h3> <hr>
-       <li > <a style="color: black;" href="{% url 'home-page'%}">All Topics</a></li>
+    <div class="sidebar bg-black">
+        <hr> <h3>Find Topics</h3> <hr>
+       <li > <a style="color: wheat;" href="{% url 'home-page'%}">All Topics</a></li>
 
         {% for topic in topics %}
            <ul>
-               <li> <a style="color: black;" href="{% url 'home-page' %}?q={{topic.name}}">{{topic.name}}</a></li>
+               <li> <a style="color: wheat;" href="{% url 'home-page' %}?q={{topic.name}}">{{topic.name}}</a></li>
            </ul>
   
         {% endfor %}
     </div>
 
    
-     <div style="padding: 30px; width: 60%; background-color: rgba(245, 222, 179, 0.59);" class="container mt-2 ">
-        <div class="media">
-           
+     <div style="padding: 30px; width: 60%; background-color: rgba(245, 222, 179, 0.59);" class="container mt-2 bg-black ">
                 <div class="media-body">
                     <img  style="object-fit: cover;" class="rounded-circle account-img" src="{{ user.profile.profile_pic.url }}" width="100px" height="100px">
                     <h4 style="margin-left: 5px;" class="account-heading ">{{user.username}}</h4>
                      <p style="margin-left: 5px;" class="text-secondary ">{{user.email}}</p>
 
-                     <h5>Update Profile Infomation</h5>
+                </div>     
+
+                    <h5>Update Profile Infomation</h5>
                     <form method='POST' enctype="multipart/form-data">
                         {% csrf_token %}
                          {{ d_form|crispy }}
@@ -53,9 +57,6 @@
                         <button style="margin: 30px 30px 0px 30px;" class="btn btn-outline-dark mt-5" type="submit" name="update" >Update</button>
                     </form>
                      
-                </div>
+        </div>
    
-   
-
-    
 {% endblock %}
