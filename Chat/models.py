@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-# from ckeditor.fields import RichTextField
+from ckeditor.fields import RichTextField
 
 
 class Topic(models.Model):
@@ -14,7 +14,7 @@ class ChatRoom(models.Model):
     room_host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     room_title = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=200)
-    description = models.TextField(null=True, blank=True)
+    description = RichTextField(null=True, blank=True)
     room_members = models.ManyToManyField(User, related_name='participants', blank=True)
     update = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

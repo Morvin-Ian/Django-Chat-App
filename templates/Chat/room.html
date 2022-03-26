@@ -3,8 +3,12 @@
 
     {% block content%}
     <style>
+        body{
+            background-color: black;
+        }
         h3,p, div{
             margin: 10px;
+            color: wheat;
         }
 
         input{
@@ -14,58 +18,69 @@
         .container{
             display: flex;
             justify-content: space-between;
+            color: whitesmoke;
         }
         .right{
             flex-basis: 30%;
+         
+
         }
         .left{
             flex-basis: 60%;
         }
  
     </style>
-<div class="container">
+<body>
+    
+    <div class="container bg-dark">
    
-    <div class="left">
-        <hr>
-        <h3> {{room.name}} </h3>
-        <p>{{room.description}}</p>
-
-        <div class="Comments">
+        <div class="left">
             <hr>
-                <h4 style="text-decoration: underline;">Conversations</h4>
-                {% for comment in comments %}
-                   <strong>@{{comment.user}} </strong>{{comment.created|timesince}} Ago<br>
-                    {{comment.body}} <br>
-                   
-                    {% if request.user == comment.user%}
-                        <a  class=" btn-outline-danger mt-1"  href="{% url 'delete-message' comment.id%}">Delete</a> <br> <hr>
+            <h3> {{room.name}} </h3>
+            <p>{{room.description}}</p>
+    
+            <div class="Comments">
+                <hr>
+                    <h4 style="text-decoration: underline; color: rgba(240, 174, 6, 0.83);">Conversations</h4>
+                    {% for comment in comments %}
+                       <strong style="color: white;" >@{{comment.user}} </strong> <time style="color: white;">{{comment.created|timesince}} Ago</time> <br>
+                        {{comment.body}} <br>
+                       
+                        {% if request.user == comment.user%}
+                            <a  class=" btn-outline-danger mt-1"  href="{% url 'delete-message' comment.id%}">Delete</a> <br> <hr>
+                        {% endif %}
+                    {% endfor %} 
+                    {% if request.user.is_authenticated %}
+                    <form method="post">
+                        {% csrf_token %}
+                       <input type="text" name="comment" placeholder="Write Your Comment"> <br>
+                        <button class="btn btn-outline-success mt-2" type="submit">Comment</button>
+                    </form>
                     {% endif %}
-                {% endfor %} 
-                {% if request.user.is_authenticated %}
-                <form method="post">
-                    {% csrf_token %}
-                   <input type="text" name="comment" placeholder="Write Your Comment"> <br>
-                    <button class="btn btn-outline-dark mt-1" type="submit">Comment</button>
-                </form>
-                {% endif %}
-            <hr>
+                <hr>
+            </div>
+    
         </div>
-
-    </div>
-
-    <div class="right">
-        <hr>
-        <h3>Partcipants</h3>
-        <hr>
-        {% for participant in participants %}
-        <a href="{% url 'profile' %}"> <img  style="object-fit: cover;" class="rounded-circle account-img" src="{{ participant.profile.profile_pic.url }}" width="50px" height="50px"> <br>
-                   <strong>@{{participant.username}} </strong> <br>
+    
+        <div class="right">
+            <hr>
+            <h3 style="color: rgba(240, 174, 6, 0.83);">Partcipants</h3>
+            <hr>
+            {% for participant in participants %}
+              
+                    <a href="{% url 'profile' %}"> <img  style="object-fit: cover;" class="rounded-circle account-img" src="{{ participant.profile.profile_pic.url }}" width="50px" height="50px"> <br>
+                    <strong>@{{participant.username}} </strong> <br>
                     {{participant.email}} <br>
-                    <hr>
-                {% endfor %} 
+                    <hr> 
+                    {% endfor %}  <br>
+        </div>
+    
     </div>
+      
+        {% endblock content %}
+    
+    
+</body>
 
-</div>
-  
-    {% endblock content %}
+
 

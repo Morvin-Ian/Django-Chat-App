@@ -62,9 +62,9 @@ def create_room(request):
     topics = Topic.objects.all()
     form = RoomForm()
     if request.method == 'POST':
-        name = request.POST.get('topic')
+        topic_name = request.POST.get('topic')
         form = RoomForm(request.POST)
-        topic, created = Topic.objects.get_or_create(name=name)
+        topic, created = Topic.objects.get_or_create(name=topic_name)
         ChatRoom.objects.create(
             room_host = request.user,
             room_title = topic,
@@ -92,6 +92,7 @@ def update_room(request, pk):
         topic_name = request.POST.get('topic')
         topic, created = Topic.objects.get_or_create(name=topic_name)
         room.name = request.POST.get('name'),
+        room.room_title = topic
         room.description = request.POST.get('description')
         room.save() 
         return redirect('home-page')
