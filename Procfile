@@ -1,0 +1,1 @@
+web: gunicorn morvinchats.wsgi --log-file -
