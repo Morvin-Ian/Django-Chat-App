@@ -1,1 +1,1 @@
-web: gunicorn morvinchats.wsgi --log-file -
+web: gunicorn Hackerthon.wsgi --log-file -
