@@ -1,4 +1,4 @@
 # Django-Chat-App
 Django Chat App 
 ## Hosted on Heroku
-# ["https//morvinchats.herokuapp.com"] (Django Chat App)
+### [Django Chat App](https//morvinchats.herokuapp.com) 
