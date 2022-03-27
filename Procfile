@@ -1,0 +1,1 @@
+web: gunicorn Hackerthon.wsgi --log-file -

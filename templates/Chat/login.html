@@ -27,7 +27,11 @@
             <h3 style="text-align: center;" >Login into Account</h3>
             {% csrf_token %}
              <section>{{ form|crispy }}</section>
-            <button class="btn btn-outline-success mt-1" type="submit">Login</button>
+             <button class="btn btn-outline-success mt-1" type="submit">Login</button> 
+             <div class="pt-3">
+                <p style="text-align: center;">Register New Account? <a style="text-decoration: none;" href="{% url 'register'%}">Register</a></p>
+            </div>
+         
         </form>
 
     {% endblock content %}

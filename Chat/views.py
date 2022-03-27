@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
 from .models import ChatRoom, Topic, Message
-from .forms import RoomForm, UpdateDetails, UpdateProfile
+from .forms import RoomForm, UpdateDetails, UpdateProfile, UserRegistrationForm
 
 
 @login_required(login_url='login')
@@ -118,7 +118,7 @@ def delete_message(request, pk):
             return redirect('home-page')
     return render(request, 'Chat/delete.html',{"message_del":message_del})
 
-
+@login_required(login_url='login')
 def profile(request):
     topics = Topic.objects.all()
     if request.method == 'POST':
@@ -136,3 +136,15 @@ def profile(request):
     context = {"d_form":d_form,"p_form":p_form, "topics":topics}
 
     return render(request, 'Chat/profile.html',context)
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.info(request, f'Account creation for {username} succesful')
+            return redirect('login')
+    else:
+        form = UserRegistrationForm()
+    return render(request, 'Chat/register.html',{"form":form})
